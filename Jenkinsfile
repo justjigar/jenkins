@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        echo 'Preperation'
+        echo 'Preperation for VECTOR Incremental'
       }
     }
     stage('Build') {
