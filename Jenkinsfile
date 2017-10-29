@@ -1,33 +1,14 @@
 pipeline {
   agent any
   stages {
-    stage('Preperation') {
+    stage('Checkout') {
       steps {
         echo 'Preperation'
       }
     }
-    stage('Checkout') {
-      steps {
-        echo 'Checkout vysionics_bsp'
-      }
-    }
     stage('Build') {
-      parallel {
-        stage('VECTOR') {
-          steps {
-            echo 'Build VECTOR_defconfig'
-          }
-        }
-        stage('VECTOR SR') {
-          steps {
-            echo 'Build VECTOR_SR_defconfig'
-          }
-        }
-        stage('VECTOR SPECS') {
-          steps {
-            echo 'Build VECTOR SPECS'
-          }
-        }
+      steps {
+        echo 'Build VECTOR_defconfig'
       }
     }
     stage('Test') {
@@ -60,17 +41,8 @@ pipeline {
       }
     }
     stage('Finalise') {
-      parallel {
-        stage('Promotion') {
-          steps {
-            echo 'Promote build to QA'
-          }
-        }
-        stage('Archive') {
-          steps {
-            echo 'Archive build outputs'
-          }
-        }
+      steps {
+        echo 'Promote build to QA'
       }
     }
   }
