@@ -28,7 +28,7 @@ pipeline {
         dir('vector_incremental_build') {
             sh 'mkdir -p target/usr/vysionics/etc/'
             sh 'touch target/usr/vysionics/etc/md5sums.txt'
-            sh 'echo "BR2_BUILD_TESTS" >> .config
+            sh 'echo "BR2_BUILD_TESTS" >> .config'
             sh 'make BR2_JLEVEL=0 BR2_EXTERNAL=../vys_buildroot O=$PWD -C../buildroot/ VECTOR_defconfig'
             sh 'make'
         }
