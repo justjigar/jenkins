@@ -24,7 +24,7 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Build VECTOR_defconfig'
-        sh 'mkdir ./vysionics_bsp/vector_incremental_build'
+        sh 'mkdir -p ./vysionics_bsp/vector_incremental_build'
         dir('./vysionics_bsp/vector_incremental_build') {
             sh 'mkdir -p target/usr/vysionics/etc/'
             sh 'touch target/usr/vysionics/etc/md5sums.txt'
