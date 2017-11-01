@@ -8,48 +8,47 @@ pipeline {
   }
   stages {
     stage('Checkout') {
-        steps 
+      steps 
+      {
+        if( params.BUILD_ACTION == 'clean' )
         {
-          if( params.BUILD_ACTION == 'clean' )
+            echo 'Preperation for VECTOR Incremental'
+            checkout([$class: 'SubversionSCM', 
+            additionalCredentials: [], 
+            excludedCommitMessages: '', 
+            excludedRegions: '', 
+            excludedRevprop: '', 
+            excludedUsers: '', 
+            filterChangelog: false, 
+            ignoreDirPropChanges: false, 
+            includedRegions: '', 
+            locations: [[credentialsId: 'vys-svn', 
+                        depthOption: 'infinity', 
+                        ignoreExternalsOption: true, 
+                        local: 'vysionics_bsp', 
+                        remote: 'svn://vys-svn/vysionics_bsp/trunk']], 
+            workspaceUpdater: [$class: 'UpdateUpdater']])        
+        }
+        else
+        {
+          dir('./vysionics_bsp/vector_incremental_build/build/vysionics-HEAD')
           {
-              echo 'Preperation for VECTOR Incremental'
-              checkout([$class: 'SubversionSCM', 
-              additionalCredentials: [], 
-              excludedCommitMessages: '', 
-              excludedRegions: '', 
-              excludedRevprop: '', 
-              excludedUsers: '', 
-              filterChangelog: false, 
-              ignoreDirPropChanges: false, 
-              includedRegions: '', 
-              locations: [[credentialsId: 'vys-svn', 
-                          depthOption: 'infinity', 
-                          ignoreExternalsOption: true, 
-                          local: 'vysionics_bsp', 
-                          remote: 'svn://vys-svn/vysionics_bsp/trunk']], 
-              workspaceUpdater: [$class: 'UpdateUpdater']])        
-          }
-          else
-          {
-            dir('./vysionics_bsp/vector_incremental_build/build/vysionics-HEAD')
-            {
-              checkout([$class: 'SubversionSCM', 
-              additionalCredentials: [], 
-              excludedCommitMessages: '', 
-              excludedRegions: '', 
-              excludedRevprop: '', 
-              excludedUsers: '', 
-              filterChangelog: false, 
-              ignoreDirPropChanges: false, 
-              includedRegions: '', 
-              locations: [[credentialsId: 'vys-svn', 
-                          depthOption: 'infinity', 
-                          ignoreExternalsOption: true, 
-                          local: './', 
-                          remote: 'svn://vys-svn/specs_3_vector/Software/trunk']], 
-              workspaceUpdater: [$class: 'UpdateUpdater']])
-              sh 'rm .stamp_configured .stamp_built .stamp_staging_installed .stamp_target_installed'
-            }
+            checkout([$class: 'SubversionSCM', 
+            additionalCredentials: [], 
+            excludedCommitMessages: '', 
+            excludedRegions: '', 
+            excludedRevprop: '', 
+            excludedUsers: '', 
+            filterChangelog: false, 
+            ignoreDirPropChanges: false, 
+            includedRegions: '', 
+            locations: [[credentialsId: 'vys-svn', 
+                        depthOption: 'infinity', 
+                        ignoreExternalsOption: true, 
+                        local: './', 
+                        remote: 'svn://vys-svn/specs_3_vector/Software/trunk']], 
+            workspaceUpdater: [$class: 'UpdateUpdater']])
+            sh 'rm .stamp_configured .stamp_built .stamp_staging_installed .stamp_target_installed'
           }
         }
       }
