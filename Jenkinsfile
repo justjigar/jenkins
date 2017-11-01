@@ -82,7 +82,7 @@ pipeline {
       parallel {
         stage('Unit Test') {
           environment { 
-            BUILD_LD_LIBRARY_PATH = '${WORKSPACE}/vysionics_bsp/vector_incremental_build/target/usr/vysionics/lib/:${WORKSPACE}/vysionics_bsp/vector_incremental_build/target/usr/lib/' 
+            BUILD_LD_LIBRARY_PATH = './vysionics_bsp/vector_incremental_build/target/usr/vysionics/lib/:./vysionics_bsp/vector_incremental_build/target/usr/lib/' 
           }
           steps {
             sh 'printenv'
