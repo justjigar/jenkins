@@ -55,9 +55,10 @@ pipeline {
       }
     }
     stage('Build') {
-      if( params.BUILD_ACTION == 'clean' )
+      steps 
       {
-        steps {
+        if( params.BUILD_ACTION == 'clean' )
+        {
           echo 'Build VECTOR_defconfig'
           wrap([$class: 'TimestamperBuildWrapper']) {
             sh 'mkdir -p ./vysionics_bsp/vector_incremental_build'
@@ -70,10 +71,8 @@ pipeline {
             }
           }
         }
-      }
-      else
-      {
-        steps {
+        else
+        {
           echo 'Build Incremental of vysionics-HEAD'
           wrap([$class: 'TimestamperBuildWrapper']) {
             dir('./vysionics_bsp/vector_incremental_build') {
