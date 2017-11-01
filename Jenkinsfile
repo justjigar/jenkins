@@ -84,7 +84,7 @@ pipeline {
           steps {
             dir('./vysionics_bsp/vector_incremental_build/build/vysionics-HEAD/buildroot-build/') {
               dir('./bofservice/src/bofservice-build'){
-                sh 'LD_LIBRARY_PATH=$WORKSPACE/build/install/usr/vysionics/lib/:$WORKSPACE/build/boost/src/boost_1_58_0/stage/lib/:$WORKSPACE/build/install/opencv_2_4_11/lib/ ./src/test/test_bofservice --gtest_output=xml:test_bofservice.xml'
+                sh 'LD_LIBRARY_PATH=$WORKSPACE/vysionics_bsp/vector_incremental_build/target/usr/vysionics/lib/:$WORKSPACE/vysionics_bsp/vector_incremental_build/target/usr/lib/ ./src/test/test_bofservice --gtest_output=xml:test_bofservice.xml'
               }
             }
             step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'GoogleTestType', deleteOutputFiles: false, failIfNotNew: true, pattern: '**/src/*-build/test_*.xml', skipNoTestFiles: false, stopProcessingIfError: true]]])
