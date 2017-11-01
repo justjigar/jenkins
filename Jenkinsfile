@@ -52,32 +52,29 @@ pipeline {
       }
     }
     stage('Build') {
-      steps 
-      {
+      steps {
         script {
-        if( params.BUILD_ACTION == 'clean' )
-        {
-          echo 'Build VECTOR_defconfig'
-          wrap([$class: 'TimestamperBuildWrapper']) {
-            sh 'mkdir -p ./vysionics_bsp/vector_incremental_build'
-            dir('./vysionics_bsp/vector_incremental_build') {
-                sh 'mkdir -p target/usr/vysionics/etc/'
-                sh 'touch target/usr/vysionics/etc/md5sums.txt'
-                sh 'make BR2_JLEVEL=0 BR2_EXTERNAL=../vys_buildroot O=$PWD -C../buildroot/ VECTOR_defconfig'
-                sh 'make BR2_BUILD_TESTS=y'
-                sh 'make'
+          if( params.BUILD_ACTION == 'clean' ) {
+            echo 'Build VECTOR_defconfig'
+            wrap([$class: 'TimestamperBuildWrapper']) {
+              sh 'mkdir -p ./vysionics_bsp/vector_incremental_build'
+              dir('./vysionics_bsp/vector_incremental_build') {
+                  sh 'mkdir -p target/usr/vysionics/etc/'
+                  sh 'touch target/usr/vysionics/etc/md5sums.txt'
+                  sh 'make BR2_JLEVEL=0 BR2_EXTERNAL=../vys_buildroot O=$PWD -C../buildroot/ VECTOR_defconfig'
+                  sh 'make BR2_BUILD_TESTS=y'
+                  sh 'make'
+              }
             }
           }
-        }
-        else
-        {
-          echo 'Build Incremental of vysionics-HEAD'
-          wrap([$class: 'TimestamperBuildWrapper']) {
-            dir('./vysionics_bsp/vector_incremental_build') {
-                sh 'make'            
+          else {
+            echo 'Build Incremental of vysionics-HEAD'
+            wrap([$class: 'TimestamperBuildWrapper']) {
+              dir('./vysionics_bsp/vector_incremental_build') {
+                  sh 'make'            
+              }
             }
           }
-        }
         }
       }
     }
@@ -85,7 +82,12 @@ pipeline {
       parallel {
         stage('Unit Test') {
           steps {
-            echo 'Unit Tests'
+            dir('./vysionics_bsp/vector_incremental_build/build/vysionics-HEAD/buildroot-build/') {
+              dir('./bofservice/src/bofservice-build'){
+                sh 'LD_LIBRARY_PATH=$WORKSPACE/build/install/usr/vysionics/lib/:$WORKSPACE/build/boost/src/boost_1_58_0/stage/lib/:$WORKSPACE/build/install/opencv_2_4_11/lib/ ./src/test/test_bofservice --gtest_output=xml:test_bofservice.xml'
+              }
+            }
+            step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'GoogleTestType', deleteOutputFiles: false, failIfNotNew: true, pattern: '**/src/*-build/test_*.xml', skipNoTestFiles: false, stopProcessingIfError: true]]])
           }
         }
         stage('Static Analysis') {
