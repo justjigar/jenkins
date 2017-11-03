@@ -85,32 +85,30 @@ pipeline {
             LD_LIBRARY_PATH = "$WORKSPACE/vysionics_bsp/vector_incremental_build/target/usr/vysionics/lib/:$WORKSPACE/vysionics_bsp/vector_incremental_build/target/usr/lib/"
           }
           steps {
-            sh 'echo $LD_LIBRARY_PATH'
-            sh 'echo $WORKSPACE'
             dir('./vysionics_bsp/vector_incremental_build/build/vysionics-HEAD/buildroot-build/') {
               dir('./aspd/src/aspd-build'){
                 sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_aspd --gtest_output=xml:test_aspd.xml'
               }
               dir('./bofservice/src/bofservice-build'){
-                sh 'LD_LIBRARY_PATH=${BUILD_LD_LIBRARY_PATH} ./src/test/test_bofservice --gtest_output=xml:test_bofservice.xml'
+                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_bofservice --gtest_output=xml:test_bofservice.xml'
               }
               dir('./commissioning/src/commissioning-build'){
-                sh 'LD_LIBRARY_PATH=${BUILD_LD_LIBRARY_PATH} ./src/test/test_commissioning --gtest_output=xml:test_commissioning.xml'
+                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_commissioning --gtest_output=xml:test_commissioning.xml'
               }
               dir('./libVysUtils/src/libVysUtils-build'){
-                sh 'LD_LIBRARY_PATH=${BUILD_LD_LIBRARY_PATH} ./src/test/test_VysUtils --gtest_output=xml:test_VysUtils.xml'
+                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_VysUtils --gtest_output=xml:test_VysUtils.xml'
               }
               dir('./libengine/src/libengine-build'){
-                sh 'LD_LIBRARY_PATH=${BUILD_LD_LIBRARY_PATH} ./src/test/test_libengine --gtest_output=xml:test_libengine.xml'
+                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_libengine --gtest_output=xml:test_libengine.xml'
               }
               dir('./libengine_qfree/src/libengine_qfree-build'){
-                sh 'LD_LIBRARY_PATH=${BUILD_LD_LIBRARY_PATH} ./src/test/test_libengine_qfree --gtest_output=xml:test_libengine_qfree.xml'
+                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_libengine_qfree --gtest_output=xml:test_libengine_qfree.xml'
               }
               dir('./nrsd/src/nrsd-build'){
-                sh 'LD_LIBRARY_PATH=${BUILD_LD_LIBRARY_PATH} ./src/test/test_nrsd --gtest_output=xml:test_nrsd.xml'
+                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_nrsd --gtest_output=xml:test_nrsd.xml'
               }
               dir('./supervisor/src/supervisor-build'){
-                sh 'LD_LIBRARY_PATH=${BUILD_LD_LIBRARY_PATH} ./src/test/test_supervisor --gtest_output=xml:test_supervisor.xml'
+                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_supervisor --gtest_output=xml:test_supervisor.xml'
               }
             }
             step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'GoogleTestType', deleteOutputFiles: false, failIfNotNew: true, pattern: '**/src/*-build/test_*.xml', skipNoTestFiles: false, stopProcessingIfError: true]]])
