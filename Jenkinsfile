@@ -82,10 +82,11 @@ pipeline {
       parallel {
         stage('Unit Test') {
           environment { 
-            LD_LIBRARY_PATH = '$WORKSPACE/vysionics_bsp/vector_incremental_build/target/usr/vysionics/lib/:$WORKSPACE/vysionics_bsp/vector_incremental_build/target/usr/lib/' 
+            LD_LIBRARY_PATH = "$WORKSPACE/vysionics_bsp/vector_incremental_build/target/usr/vysionics/lib/:$WORKSPACE/vysionics_bsp/vector_incremental_build/target/usr/lib/"
           }
           steps {
             sh 'echo $LD_LIBRARY_PATH'
+            sh 'echo $WORKSPACE'
             dir('./vysionics_bsp/vector_incremental_build/build/vysionics-HEAD/buildroot-build/') {
               dir('./aspd/src/aspd-build'){
                 sh 'LD_LIBRARY_PATH=$LD_LIBRARY_PATH ./src/test/test_aspd --gtest_output=xml:test_aspd.xml'
