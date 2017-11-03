@@ -89,7 +89,7 @@ pipeline {
             sh 'echo $WORKSPACE'
             dir('./vysionics_bsp/vector_incremental_build/build/vysionics-HEAD/buildroot-build/') {
               dir('./aspd/src/aspd-build'){
-                sh 'LD_LIBRARY_PATH=$LD_LIBRARY_PATH ./src/test/test_aspd --gtest_output=xml:test_aspd.xml'
+                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_aspd --gtest_output=xml:test_aspd.xml'
               }
               dir('./bofservice/src/bofservice-build'){
                 sh 'LD_LIBRARY_PATH=${BUILD_LD_LIBRARY_PATH} ./src/test/test_bofservice --gtest_output=xml:test_bofservice.xml'
