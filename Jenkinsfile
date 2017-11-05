@@ -88,11 +88,9 @@ pipeline {
             dir('./vysionics_bsp/vector_incremental_build/build/vysionics-HEAD/buildroot-build/') {
               dir('./aspd/src/aspd-build'){
                 sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_aspd --gtest_output=xml:test_aspd.xml'
-                step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'GoogleTestType', deleteOutputFiles: false, failIfNotNew: true, pattern: '**/src/*-build/test_*.xml', skipNoTestFiles: false, stopProcessingIfError: true]]])
               }
               dir('./bofservice/src/bofservice-build'){
                 sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_bofservice --gtest_output=xml:test_bofservice.xml'
-                step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'GoogleTestType', deleteOutputFiles: false, failIfNotNew: true, pattern: '**/src/*-build/test_*.xml', skipNoTestFiles: false, stopProcessingIfError: true]]])
               }
               // dir('./commissioning/src/commissioning-build'){
               //  sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_commissioning --gtest_output=xml:test_commissioning.xml'
@@ -101,9 +99,9 @@ pipeline {
               dir('./libVysUtils/src/libVysUtils-build'){
                 sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_VysUtils --gtest_output=xml:test_VysUtils.xml'
               }
-              dir('./libengine/src/libengine-build'){
-                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_libengine --gtest_output=xml:test_libengine.xml'
-              }
+              //dir('./libengine/src/libengine-build'){
+              //  sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_libengine --gtest_output=xml:test_libengine.xml'
+              //}
               dir('./libengine_qfree/src/libengine_qfree-build'){
                 sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_libengine_qfree --gtest_output=xml:test_libengine_qfree.xml'
               }
@@ -114,7 +112,11 @@ pipeline {
                 sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_supervisor --gtest_output=xml:test_supervisor.xml'
               }
             }
-            step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'GoogleTestType', deleteOutputFiles: false, failIfNotNew: true, pattern: '**/src/*-build/test_*.xml', skipNoTestFiles: false, stopProcessingIfError: true]]])
+          }
+          post {
+            always {
+                step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'GoogleTestType', deleteOutputFiles: false, failIfNotNew: true, pattern: '**/src/*-build/test_*.xml', skipNoTestFiles: false, stopProcessingIfError: true]]])
+            }
           }
         }
         stage('Static Analysis') {
