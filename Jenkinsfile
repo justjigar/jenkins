@@ -102,9 +102,9 @@ pipeline {
               //dir('./libengine/src/libengine-build'){
               //  sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_libengine --gtest_output=xml:test_libengine.xml'
               //}
-              dir('./libengine_qfree/src/libengine_qfree-build'){
-                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_libengine_qfree --gtest_output=xml:test_libengine_qfree.xml'
-              }
+              //dir('./libengine_qfree/src/libengine_qfree-build'){
+              //  sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_libengine_qfree --gtest_output=xml:test_libengine_qfree.xml'
+              //}
               dir('./nrsd/src/nrsd-build'){
                 sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_nrsd --gtest_output=xml:test_nrsd.xml'
               }
