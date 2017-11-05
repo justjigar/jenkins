@@ -109,7 +109,7 @@ pipeline {
                 sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_nrsd --gtest_output=xml:test_nrsd.xml'
               }
               dir('./supervisor/src/supervisor-build'){
-                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_supervisor --gtest_output=xml:test_supervisor.xml'
+                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./test/test_supervisor --gtest_output=xml:test_supervisor.xml'
               }
             }
           }
