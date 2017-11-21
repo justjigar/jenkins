@@ -46,6 +46,7 @@ pipeline {
                           remote: 'svn://vys-svn/specs_3_vector/Software/trunk']], 
               workspaceUpdater: [$class: 'UpdateUpdater']])
               sh 'rm .stamp_configured .stamp_built .stamp_staging_installed .stamp_target_installed'
+              sh 'rm -rf buildroot-build'
             }
           }
         }
