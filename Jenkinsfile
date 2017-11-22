@@ -174,7 +174,18 @@ pipeline {
     }
     stage('Package & Deploy') {
       steps {
-        echo 'Deploy to VECTOR(s)'
+        echo 'Package and Deploy to VECTOR(s)'
+        wrap([$class: 'TimestamperBuildWrapper']) {
+          dir('./vysionics_bsp/vector_incremental_build') {
+              sh './installer.sh'            
+          }
+        }
+      }
+      post {
+        always {
+            archive './vysionics_bsp/vector_incremental_build/installer/**/*.exe'
+            archive './vysionics_bsp/vector_incremental_build/installer/**/*.run'
+        }
       }
     }
     stage('Smoke Tests') {
