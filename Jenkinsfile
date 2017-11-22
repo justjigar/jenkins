@@ -1,6 +1,5 @@
 pipeline {
   agent any
-  def artifactory_server = Artifactory.server 'sandbox-server'
   parameters {
       choice(
           choices: 'incremental\nclean',
@@ -184,8 +183,6 @@ pipeline {
       }
       post {
         always {
-            sh 'pwd'
-            sh 'ls -l ./vysionics_bsp/vector_incremental_build/images/'
             archive './vysionics_bsp/vector_incremental_build/images/*bzImage'
             archive './vysionics_bsp/vector_incremental_build/images/*rootfs.cpio.xz'
         }
