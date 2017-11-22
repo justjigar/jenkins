@@ -1,5 +1,6 @@
 pipeline {
   agent any
+  def artifactory_server = Artifactory.server 'sandbox-server'
   parameters {
       choice(
           choices: 'incremental\nclean',
@@ -183,8 +184,31 @@ pipeline {
       }
       post {
         always {
+            sh 'pwd'
+            sh 'ls -l ./vysionics_bsp/vector_incremental_build/images/'
             archive './vysionics_bsp/vector_incremental_build/images/*bzImage'
             archive './vysionics_bsp/vector_incremental_build/images/*rootfs.cpio.xz'
+          
+            def uploadSpec =
+            '''{
+                "files": [
+                    {
+                        "pattern": "vysionics_bsp/vector_incremental_build/images/*bzImage",
+                        "target": "vector-incremental",
+                        "props": "p1=v1;p2=v2"
+                    },
+                    {
+                        "pattern": "vysionics_bsp/vector_incremental_build/images/*rootfs.cpio.xz",
+                        "target": "vector-incremental"
+                    }
+                ]
+            }'''
+
+            // Upload to Artifactory.
+            def buildInfo = artifactory_server.upload spec: uploadSpec
+
+            // Publish the build to Artifactory
+            server.publishBuildInfo buildInfo
         }
       }
     }
