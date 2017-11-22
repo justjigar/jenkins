@@ -45,6 +45,51 @@ pipeline {
                           local: './', 
                           remote: 'svn://vys-svn/specs_3_vector/Software/trunk']], 
               workspaceUpdater: [$class: 'UpdateUpdater']])
+              checkout([$class: 'SubversionSCM', 
+              additionalCredentials: [], 
+              excludedCommitMessages: '', 
+              excludedRegions: '', 
+              excludedRevprop: '', 
+              excludedUsers: '', 
+              filterChangelog: false, 
+              ignoreDirPropChanges: false, 
+              includedRegions: '', 
+              locations: [[credentialsId: 'vys-svn', 
+                          depthOption: 'infinity', 
+                          ignoreExternalsOption: true, 
+                          local: './ipf', 
+                          remote: 'svn://vys-svn/ipf/trunk']], 
+              workspaceUpdater: [$class: 'UpdateUpdater']])
+              checkout([$class: 'SubversionSCM', 
+              additionalCredentials: [], 
+              excludedCommitMessages: '', 
+              excludedRegions: '', 
+              excludedRevprop: '', 
+              excludedUsers: '', 
+              filterChangelog: false, 
+              ignoreDirPropChanges: false, 
+              includedRegions: '', 
+              locations: [[credentialsId: 'vys-svn', 
+                          depthOption: 'infinity', 
+                          ignoreExternalsOption: true, 
+                          local: './libVysUtils', 
+                          remote: 'svn://vys-svn/vysionics_common/trunk/libVysUtils']], 
+              workspaceUpdater: [$class: 'UpdateUpdater']])
+              checkout([$class: 'SubversionSCM', 
+              additionalCredentials: [], 
+              excludedCommitMessages: '', 
+              excludedRegions: '', 
+              excludedRevprop: '', 
+              excludedUsers: '', 
+              filterChangelog: false, 
+              ignoreDirPropChanges: false, 
+              includedRegions: '', 
+              locations: [[credentialsId: 'vys-svn', 
+                          depthOption: 'infinity', 
+                          ignoreExternalsOption: true, 
+                          local: './libVysCrypt', 
+                          remote: 'svn://vys-svn/vysionics_common/trunk/libVysCrypt']], 
+              workspaceUpdater: [$class: 'UpdateUpdater']])
               sh 'rm -f .stamp_configured .stamp_built .stamp_staging_installed .stamp_target_installed'
               sh 'rm -rf buildroot-build'
             }
@@ -127,7 +172,7 @@ pipeline {
         }
       }
     }
-    stage('Deploy') {
+    stage('Package & Deploy') {
       steps {
         echo 'Deploy to VECTOR(s)'
       }
