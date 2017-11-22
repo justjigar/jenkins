@@ -178,8 +178,8 @@ pipeline {
         wrap([$class: 'TimestamperBuildWrapper']) {
           dir('./vysionics_bsp/vector_incremental_build') {
               echo 'Call ./installer.sh'  
-              archiveArtifacts artifacts: './vysionics_bsp/vector_incremental_build/images/*bzImage'
-              archiveArtifacts artifacts: './vysionics_bsp/vector_incremental_build/images/*rootfs.cpio.xz'
+              archiveArtifacts artifacts: 'images/*bzImage'
+              archiveArtifacts artifacts: 'images/*rootfs.cpio.xz'
               //archive './vysionics_bsp/vector_incremental_build/images/*bzImage'
               //archive './vysionics_bsp/vector_incremental_build/images/*rootfs.cpio.xz'         
           }
