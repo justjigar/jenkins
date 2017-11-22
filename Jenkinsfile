@@ -177,14 +177,14 @@ pipeline {
         echo 'Package and Deploy to VECTOR(s)'
         wrap([$class: 'TimestamperBuildWrapper']) {
           dir('./vysionics_bsp/vector_incremental_build') {
-              sh './installer.sh'            
+              echo 'Call ./installer.sh'            
           }
         }
       }
       post {
         always {
-            archive './vysionics_bsp/vector_incremental_build/installer/**/*.exe'
-            archive './vysionics_bsp/vector_incremental_build/installer/**/*.run'
+            archive './vysionics_bsp/vector_incremental_build/images/*bzImage'
+            archive './vysionics_bsp/vector_incremental_build/images/*rootfs.cpio.xz'
         }
       }
     }
