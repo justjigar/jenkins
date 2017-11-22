@@ -188,25 +188,6 @@ pipeline {
             sh 'ls -l ./vysionics_bsp/vector_incremental_build/images/'
             archive './vysionics_bsp/vector_incremental_build/images/*bzImage'
             archive './vysionics_bsp/vector_incremental_build/images/*rootfs.cpio.xz'
-          
-            def uploadSpec = """{
-                "files": [
-                    {
-                        "pattern": "vysionics_bsp/vector_incremental_build/images/*bzImage",
-                        "target": "vector-incremental",
-                        "props": "p1=v1;p2=v2"
-                    },
-                    {
-                        "pattern": "vysionics_bsp/vector_incremental_build/images/*rootfs.cpio.xz",
-                        "target": "vector-incremental"
-                    }
-                ]
-            }"""
-            def buildInfo = Artifactory.newBuildInfo()
-            // Upload to Artifactory.
-            artifactory_server.upload(uploadSpec, buildInfo)
-            // Publish the build to Artifactory
-            artifactory_server.publishBuildInfo(buildInfo)
         }
       }
     }
