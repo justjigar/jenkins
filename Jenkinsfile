@@ -177,15 +177,17 @@ pipeline {
         echo 'Package and Deploy to VECTOR(s)'
         wrap([$class: 'TimestamperBuildWrapper']) {
           dir('./vysionics_bsp/vector_incremental_build') {
-              echo 'Call ./installer.sh'            
+              echo 'Call ./installer.sh'  
+              archiveArtifacts artifacts: './vysionics_bsp/vector_incremental_build/images/*bzImage'
+              archiveArtifacts artifacts: './vysionics_bsp/vector_incremental_build/images/*rootfs.cpio.xz'
+              //archive './vysionics_bsp/vector_incremental_build/images/*bzImage'
+              //archive './vysionics_bsp/vector_incremental_build/images/*rootfs.cpio.xz'         
           }
         }
       }
       post {
         always {
             echo 'Archiving..'
-            archive './vysionics_bsp/vector_incremental_build/images/*bzImage'
-            archive './vysionics_bsp/vector_incremental_build/images/*rootfs.cpio.xz'
         }
       }
     }
