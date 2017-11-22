@@ -183,6 +183,7 @@ pipeline {
       }
       post {
         always {
+            echo 'Archiving..'
             archive './vysionics_bsp/vector_incremental_build/images/*bzImage'
             archive './vysionics_bsp/vector_incremental_build/images/*rootfs.cpio.xz'
         }
