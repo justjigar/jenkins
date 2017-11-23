@@ -183,7 +183,7 @@ pipeline {
               echo 'Call ./installer.sh'  
               archiveArtifacts artifacts: 'images/*bzImage'
               archiveArtifacts artifacts: 'images/*rootfs.cpio.xz'
-              def server = Artifactory.server 'sandbox-server'
+              step(def server = Artifactory.server 'sandbox-server')
           }
         }
       }
