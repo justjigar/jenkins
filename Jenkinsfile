@@ -183,29 +183,29 @@ pipeline {
               //archive './vysionics_bsp/vector_incremental_build/images/*bzImage'
               //archive './vysionics_bsp/vector_incremental_build/images/*rootfs.cpio.xz'
               // Obtain an Artifactory server instance, defined in Jenkins --> Manage:
-              def server = Artifactory.server "sandbox-server"
+              def server = Artifactory.server 'sandbox-server'
 
               // Read the download and upload specs:
-              def uploadSpec =
-                  '''{
-                  "files": [
-                      {
-                          "pattern": "images/*bzImage",
-                          "target": "build-incremental",
-                          "props": "p1=v1;p2=v2"
-                      },
-                      {
-                          "pattern": "images/*rootfs.cpio.xz",
-                          "target": "build-incremental",
-                          "props": "p1=v1;p2=v2"
-                      }
-                  ]
-              }'''
+              //def uploadSpec =
+              //    '''{
+              //    "files": [
+              //        {
+              //            "pattern": "images/*bzImage",
+              //            "target": "build-incremental",
+              //            "props": "p1=v1;p2=v2"
+              //        },
+              //        {
+              //            "pattern": "images/*rootfs.cpio.xz",
+              //            "target": "build-incremental",
+              //            "props": "p1=v1;p2=v2"
+              //        }
+              //    ]
+              //}'''
             
               // Upload files to Artifactory:
-              def buildInfo = Artifactory.newBuildInfo()
-              buildInfo.env.capture = true
-              server.upload(uploadSpec, buildInfo)
+              //def buildInfo = Artifactory.newBuildInfo()
+              //buildInfo.env.capture = true
+              //server.upload(uploadSpec, buildInfo)
           }
         }
       }
