@@ -93,6 +93,9 @@ pipeline {
               sh 'rm -f .stamp_configured .stamp_built .stamp_staging_installed .stamp_target_installed'
               sh 'rm -rf buildroot-build'
             }
+            dir('./vysionics_bsp/vector_incremental_build') {
+              sh 'rm -f images/*'
+            }
           }
         }
       }
