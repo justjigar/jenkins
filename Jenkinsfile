@@ -185,8 +185,7 @@ pipeline {
               archiveArtifacts artifacts: 'images/*rootfs.cpio.xz'
               step(
                 def server = Artifactory.server 'sandbox-server'
-                def uploadSpec =
-                    '''{
+                def uploadSpec = """{
                     "files": [
                         {
                             "pattern": "images/*bzImage",
@@ -199,7 +198,7 @@ pipeline {
                             "props": "p1=v1;p2=v2"
                         }
                     ]
-                }'''
+                }"""
                 // Upload files to Artifactory:
                 def buildInfo = Artifactory.newBuildInfo()
                 buildInfo.env.capture = true
