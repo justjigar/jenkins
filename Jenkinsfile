@@ -183,7 +183,7 @@ pipeline {
               //archive './vysionics_bsp/vector_incremental_build/images/*bzImage'
               //archive './vysionics_bsp/vector_incremental_build/images/*rootfs.cpio.xz'
               // Obtain an Artifactory server instance, defined in Jenkins --> Manage:
-              def server = Artifactory.server 'sandbox-server'
+              //def server = Artifactory.server 'sandbox-server'
 
               // Read the download and upload specs:
               //def uploadSpec =
