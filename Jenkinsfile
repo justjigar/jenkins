@@ -184,7 +184,7 @@ pipeline {
               archiveArtifacts artifacts: 'images/*bzImage'
               archiveArtifacts artifacts: 'images/*rootfs.cpio.xz'
               step(
-                def server = Artifactory.server 'sandbox-server'
+                def server = Artifactory.server('sandbox-server')
                 def uploadSpec = """{
                     "files": [
                         {
