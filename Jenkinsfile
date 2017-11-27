@@ -183,7 +183,7 @@ pipeline {
               echo 'Call ./installer.sh'  
               archiveArtifacts artifacts: 'images/*bzImage'
               archiveArtifacts artifacts: 'images/*rootfs.cpio.xz'
-              step(
+              script{
                 def server = Artifactory.server('sandbox-server')
                 def uploadSpec = """{
                     "files": [
@@ -203,7 +203,7 @@ pipeline {
                 def buildInfo = Artifactory.newBuildInfo()
                 buildInfo.env.capture = true
                 server.upload(uploadSpec, buildInfo)
-              )
+              }
           }
         }
       }
