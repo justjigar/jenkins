@@ -11,7 +11,8 @@ pipeline {
       steps {
         script {
           if( params.BUILD_ACTION == 'clean' ) {
-              echo 'Preperation for VECTOR Incremental'
+              echo 'Preperation for VECTOR Clean build'
+              cleanWs()
               checkout([$class: 'SubversionSCM', 
               additionalCredentials: [], 
               excludedCommitMessages: '', 
@@ -94,7 +95,7 @@ pipeline {
               sh 'rm -rf buildroot-build'
             }
             dir('./vysionics_bsp/vector_incremental_build') {
-              sh 'rm -f images/*'
+              sh 'rm -f images/*.xz'
             }
           }
         }
