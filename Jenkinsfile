@@ -205,28 +205,29 @@ pipeline {
             }
             script {
               def kernel = findFiles glob: 'images/*bzImage'
+              echo """${kernel[0].name} ${kernel[0].path} ${kernel[0].directory} ${kernel[0].length} ${kernel[0].lastModified}"""
               def rootfs = findFiles glob: 'images/*.rootfs.cpio.xz'
-              nexusArtifactUploader {
-                nexusVersion('nexus3')
-                protocol('http')
-                nexusUrl('http://10.125.16.44:8082')
-                groupId('jenoptik.uk')
-                version('2.6.0')
-                repository('vector-incremental-snapshots')
-                credentialsId('nexus-jenkins')
-                artifact {
-                    artifactId('rootfs')
-                    type('xz')
-                    classifier('snapshot')
-                    file('${rootfs}')
-                }
-                artifact {
-                    artifactId('kernel')
-                    type('bzImage')
-                    classifier('snapshot')
-                    file('${kernel}')
-                }
-              }
+              // nexusArtifactUploader {
+              //   nexusVersion('nexus3')
+              //   protocol('http')
+              //   nexusUrl('http://10.125.16.44:8082')
+              //   groupId('jenoptik.uk')
+              //   version('2.6.0')
+              //   repository('vector-incremental-snapshots')
+              //   credentialsId('nexus-jenkins')
+              //   artifact {
+              //       artifactId('rootfs')
+              //       type('xz')
+              //       classifier('snapshot')
+              //       file('${rootfs}')
+              //   }
+              //   artifact {
+              //       artifactId('kernel')
+              //       type('bzImage')
+              //       classifier('snapshot')
+              //       file('${kernel}')
+              //   }
+              // }
             }
           }
         }
