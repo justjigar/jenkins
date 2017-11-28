@@ -179,30 +179,51 @@ pipeline {
         echo 'Package and Deploy to VECTOR(s)'
         wrap([$class: 'TimestamperBuildWrapper']) {
           dir('./vysionics_bsp/vector_incremental_build') {
-              echo 'Call ./installer.sh'  
-              archiveArtifacts artifacts: 'images/*bzImage'
-              archiveArtifacts artifacts: 'images/*rootfs.cpio.xz'
-              script{
-                def server = Artifactory.server('sandbox-server')
-                def uploadSpec = """{
-                    "files": [
-                        {
-                            "pattern": "images/*bzImage",
-                            "target": "build-incremental",
-                            "props": "p1=v1;p2=v2"
-                        },
-                        {
-                           "pattern": "images/*rootfs.cpio.xz",
-                            "target": "build-incremental",
-                            "props": "p1=v1;p2=v2"
-                        }
-                    ]
-                }"""
-                // Upload files to Artifactory:
-                def buildInfo = Artifactory.newBuildInfo()
-                buildInfo.env.capture = true
-                server.upload(uploadSpec, buildInfo)
+            echo 'Call ./installer.sh'  
+            archiveArtifacts artifacts: 'images/*bzImage'
+            archiveArtifacts artifacts: 'images/*rootfs.cpio.xz'
+            script{
+              def server = Artifactory.server('sandbox-server')
+              def uploadSpec = """{
+                  "files": [
+                      {
+                          "pattern": "images/*bzImage",
+                          "target": "build-incremental",
+                          "props": "p1=v1;p2=v2"
+                      },
+                      {
+                         "pattern": "images/*rootfs.cpio.xz",
+                          "target": "build-incremental",
+                          "props": "p1=v1;p2=v2"
+                      }
+                  ]
+              }"""
+              // Upload files to Artifactory:
+              def buildInfo = Artifactory.newBuildInfo()
+              buildInfo.env.capture = true
+              server.upload(uploadSpec, buildInfo)
+            }
+            nexusArtifactUploader {
+              nexusVersion('nexus3')
+              protocol('http')
+              nexusUrl('http://10.125.16.44:8082')
+              groupId('jenoptik.uk')
+              version('2.6.0')
+              repository('vector-incremental-snapshots')
+              credentialsId('nexus-jenkins')
+              artifact {
+                  artifactId('rootfs')
+                  type('xz')
+                  classifier('snapshot')
+                  file('images/*.xz')
               }
+              artifact {
+                  artifactId('kernel')
+                  type('bzImage')
+                  classifier('snapshot')
+                  file('images/*bzImage')
+              }
+            }
           }
         }
       }
