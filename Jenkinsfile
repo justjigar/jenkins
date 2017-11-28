@@ -203,25 +203,29 @@ pipeline {
               buildInfo.env.capture = true
               server.upload(uploadSpec, buildInfo)
             }
-            nexusArtifactUploader {
-              nexusVersion('nexus3')
-              protocol('http')
-              nexusUrl('http://10.125.16.44:8082')
-              groupId('jenoptik.uk')
-              version('2.6.0')
-              repository('vector-incremental-snapshots')
-              credentialsId('nexus-jenkins')
-              artifact {
-                  artifactId('rootfs')
-                  type('xz')
-                  classifier('snapshot')
-                  file('images/*.xz')
-              }
-              artifact {
-                  artifactId('kernel')
-                  type('bzImage')
-                  classifier('snapshot')
-                  file('images/*bzImage')
+            script {
+              def kernel = findFiles glob: 'images/*bzImage'
+              def rootfs = findFiles glob: 'images/*.rootfs.cpio.xz'
+              nexusArtifactUploader {
+                nexusVersion('nexus3')
+                protocol('http')
+                nexusUrl('http://10.125.16.44:8082')
+                groupId('jenoptik.uk')
+                version('2.6.0')
+                repository('vector-incremental-snapshots')
+                credentialsId('nexus-jenkins')
+                artifact {
+                    artifactId('rootfs')
+                    type('xz')
+                    classifier('snapshot')
+                    file('${rootfs}')
+                }
+                artifact {
+                    artifactId('kernel')
+                    type('bzImage')
+                    classifier('snapshot')
+                    file('${kernel}')
+                }
               }
             }
           }
