@@ -204,9 +204,16 @@ pipeline {
               server.upload(uploadSpec, buildInfo)
             }
             script {
-              def kernel = findFiles glob: 'images/*bzImage'
-              echo """${kernel[0].name} ${kernel[0].path} ${kernel[0].directory} ${kernel[0].length} ${kernel[0].lastModified}"""
-              def rootfs = findFiles glob: 'images/*.rootfs.cpio.xz'
+              try{
+                def kernel = findFiles glob: 'images/*bzImage'
+                echo """${kernel[0].name} ${kernel[0].path} ${kernel[0].directory} ${kernel[0].length} ${kernel[0].lastModified}"""
+              }
+              catch(err){}
+              try{
+                def rootfs = findFiles glob: 'images/*.rootfs.cpio.xz'
+                echo """${rootfs[0].name} ${rootfs[0].path} ${rootfs[0].directory} ${rootfs[0].length} ${rootfs[0].lastModified}"""
+              }
+              catch(err){}
               // nexusArtifactUploader {
               //   nexusVersion('nexus3')
               //   protocol('http')
