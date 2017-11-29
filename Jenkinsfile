@@ -113,7 +113,7 @@ pipeline {
                   sh 'touch target/usr/vysionics/etc/md5sums.txt'
                   sh 'make BR2_JLEVEL=0 BR2_EXTERNAL=../vys_buildroot O=$PWD -C../buildroot/ VECTOR_defconfig'
                   sh 'make BR2_BUILD_TESTS=y'
-                  sh 'make'
+                  //sh 'make'
               }
             }
           }
@@ -139,21 +139,21 @@ pipeline {
               dir('./aspd/src/aspd-build'){
                 sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_aspd --gtest_output=xml:test_aspd.xml'
               }
-              //dir('./bofservice/src/bofservice-build'){
-              //  sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_bofservice --gtest_output=xml:test_bofservice.xml'
-              //}
+              dir('./bofservice/src/bofservice-build'){
+                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_bofservice --gtest_output=xml:test_bofservice.xml'
+              }
               // dir('./commissioning/src/commissioning-build'){
               //  sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_commissioning --gtest_output=xml:test_commissioning.xml'
               //}
               dir('./libVysUtils/src/libVysUtils-build'){
                 sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_VysUtils --gtest_output=xml:test_VysUtils.xml'
               }
-              //dir('./libengine/src/libengine-build'){
-              //  sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_libengine --gtest_output=xml:test_libengine.xml'
-              //}
-              //dir('./libengine_qfree/src/libengine_qfree-build'){
-              //  sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_libengine_qfree --gtest_output=xml:test_libengine_qfree.xml'
-              //}
+              dir('./libengine/src/libengine-build'){
+                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_libengine --gtest_output=xml:test_libengine.xml'
+              }
+              dir('./libengine_qfree/src/libengine_qfree-build'){
+                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_libengine_qfree --gtest_output=xml:test_libengine_qfree.xml'
+              }
               dir('./nrsd/src/nrsd-build'){
                 sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_nrsd --gtest_output=xml:test_nrsd.xml'
               }
@@ -207,35 +207,35 @@ pipeline {
             script {
               try{
                 def kernel = findFiles glob: 'images/*bzImage'
-                echo """${kernel[0].name} ${kernel[0].path} ${kernel[0].directory} ${kernel[0].length} ${kernel[0].lastModified}"""
+                echo """${kernel[0].name} ${kernel[0].path} ${kernel[0].directory} ${kernel.length} ${kernel[0].lastModified}"""
               }
               catch(err){}
               try{
                 def rootfs = findFiles glob: 'images/*.rootfs.cpio.xz'
-                echo """${rootfs[0].name} ${rootfs[0].path} ${rootfs[0].directory} ${rootfs[0].length} ${rootfs[0].lastModified}"""
+                echo """${rootfs[0].name} ${rootfs[0].path} ${rootfs[0].directory} ${rootfs.length} ${rootfs[0].lastModified}"""
               }
               catch(err){}
-              // nexusArtifactUploader {
-              //   nexusVersion('nexus3')
-              //   protocol('http')
-              //   nexusUrl('http://10.125.16.44:8082')
-              //   groupId('jenoptik.uk')
-              //   version('2.6.0')
-              //   repository('vector-incremental-snapshots')
-              //   credentialsId('nexus-jenkins')
-              //   artifact {
-              //       artifactId('rootfs')
-              //       type('xz')
-              //       classifier('snapshot')
-              //       file('${rootfs}')
-              //   }
-              //   artifact {
-              //       artifactId('kernel')
-              //       type('bzImage')
-              //       classifier('snapshot')
-              //       file('${kernel}')
-              //   }
-              // }
+              nexusArtifactUploader {
+                nexusVersion('nexus3')
+                protocol('http')
+                nexusUrl('http://10.125.16.44:8082')
+                groupId('jenoptik.uk')
+                version('2.6.0')
+                repository('vector-incremental-snapshots')
+                credentialsId('nexus-jenkins')
+                artifact {
+                    artifactId('rootfs')
+                    type('xz')
+                    classifier('snapshot')
+                    file('${rootfs[0].path}')
+                }
+                artifact {
+                    artifactId('kernel')
+                    type('bzImage')
+                    classifier('snapshot')
+                    file('${kernel[0].path}')
+                }
+              }
             }
           }
         }
