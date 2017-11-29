@@ -12,7 +12,7 @@ pipeline {
         script {
           if( params.BUILD_ACTION == 'clean' ) {
               echo 'Preperation for VECTOR Clean build'
-              cleanWs()
+              sh 'rm -rf vysionics_bsp'
               checkout([$class: 'SubversionSCM', 
               additionalCredentials: [], 
               excludedCommitMessages: '', 
