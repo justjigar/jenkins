@@ -121,7 +121,7 @@ pipeline {
             echo 'Build Incremental of vysionics-HEAD'
             wrap([$class: 'TimestamperBuildWrapper']) {
               dir('./vysionics_bsp/vector_incremental_build') {
-                  sh 'make'            
+                  sh 'make BR2_BUILD_TESTS=y'            
               }
             }
           }
