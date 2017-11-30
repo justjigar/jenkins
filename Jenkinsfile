@@ -232,7 +232,7 @@ pipeline {
                      artifactId: bzImage,
                      classifier: 'snapshot',
                      file: '${kernel[0].path}',
-                     type: 'bzImage'
+                     type: 'zip'
                   ]
                 ]
              )
