@@ -211,27 +211,52 @@ pipeline {
                 def rootfs = findFiles glob: 'images/*rootfs.cpio.xz'
                 echo """${rootfs[0].name} ${rootfs[0].path} ${rootfs[0].directory} ${rootfs.length} ${rootfs[0].lastModified}"""
               
-              nexusArtifactUploader {
-                nexusVersion('nexus3')
-                protocol('http')
-                nexusUrl('http://10.125.16.44:8082')
-                groupId('jenoptik.uk')
-                version('2.6.0')
-                repository('vector-incremental-snapshots')
-                credentialsId('nexus-jenkins')
-                artifact {
-                    artifactId('rootfs')
-                    type('xz')
-                    classifier('snapshot')
-                    file('${rootfs[0].path}')
-                }
-                artifact {
-                    artifactId('kernel')
-                    type('bzImage')
-                    classifier('snapshot')
-                    file('${kernel[0].path}')
-                }
-              }
+              def version = '2.6.0'
+
+              nexusArtifactUploader(
+                nexusVersion: 'nexus3',
+                protocol: 'http',
+                nexusUrl: '10.125.16.44:8082',
+                groupId: 'jenoptik.uk',
+                version: version,
+                repository: 'vector-incremental-snapshots',
+                credentialsId: 'nexus-jenkins',
+                artifacts: [
+                  [
+                     artifactId: rootfs,
+                     classifier: 'snapshot',
+                     file: '${rootfs[0].path}',
+                     type: 'xz'
+                  ],                  
+                  [
+                     artifactId: bzImage,
+                     classifier: 'snapshot',
+                     file: '${kernel[0].path}',
+                     type: 'bzImage'
+                  ]
+                ]
+             )
+              // nexusArtifactUploader {
+              //   nexusVersion('nexus3')
+              //   protocol('http')
+              //   nexusUrl('http://10.125.16.44:8082')
+              //   groupId('jenoptik.uk')
+              //   version('2.6.0')
+              //   repository('vector-incremental-snapshots')
+              //   credentialsId('nexus-jenkins')
+              //   artifact {
+              //       artifactId('rootfs')
+              //       type('xz')
+              //       classifier('snapshot')
+              //       file('${rootfs[0].path}')
+              //   }
+              //   artifact {
+              //       artifactId('kernel')
+              //       type('bzImage')
+              //       classifier('snapshot')
+              //       file('${kernel[0].path}')
+              //   }
+              // }
             }
           }
         }
