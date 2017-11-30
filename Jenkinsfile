@@ -223,16 +223,16 @@ pipeline {
                 credentialsId: 'nexus-jenkins',
                 artifacts: [
                   [
-                     artifactId: rootfs,
+                     artifactId: 'rootfs',
                      classifier: 'snapshot',
                      file: '${rootfs[0].path}',
                      type: 'xz'
                   ],                  
                   [
-                     artifactId: bzImage,
+                     artifactId: 'bzImage',
                      classifier: 'snapshot',
                      file: '${kernel[0].path}',
-                     type: 'zip'
+                     type: 'bzImage'
                   ]
                 ]
              )
