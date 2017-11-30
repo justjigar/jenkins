@@ -225,13 +225,13 @@ pipeline {
                   [
                      artifactId: 'rootfs',
                      classifier: 'snapshot',
-                     file: '${rootfs[0].path}',
+                     file: 'rootfs[0].path',
                      type: 'xz'
                   ],                  
                   [
                      artifactId: 'bzImage',
                      classifier: 'snapshot',
-                     file: '${kernel[0].path}',
+                     file: 'kernel[0].path',
                      type: 'bzImage'
                   ]
                 ]
