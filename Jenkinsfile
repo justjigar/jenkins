@@ -211,7 +211,7 @@ pipeline {
                 def rootfs = findFiles glob: 'images/*rootfs.cpio.xz'
                 echo """${rootfs[0].name} ${rootfs[0].path} ${rootfs[0].directory} ${rootfs.length} ${rootfs[0].lastModified}"""
               
-              def (timestamp, extension) = """${rootfs[0].name}""".tokenize( '_' )
+              def timestamp = """${rootfs[0].name}""".split( '_' )
               def version = '2.6.0'
 
               nexusArtifactUploader(
@@ -219,7 +219,7 @@ pipeline {
                 protocol: 'http',
                 nexusUrl: '10.125.16.44:8082',
                 groupId: 'incremental.build',
-                version: timestamp,
+                version: timestamp[0],
                 repository: 'VECTOR/',
                 credentialsId: 'nexus-jenkins',
                 artifacts: [
