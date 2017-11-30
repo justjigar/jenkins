@@ -211,28 +211,29 @@ pipeline {
                 def rootfs = findFiles glob: 'images/*rootfs.cpio.xz'
                 echo """${rootfs[0].name} ${rootfs[0].path} ${rootfs[0].directory} ${rootfs.length} ${rootfs[0].lastModified}"""
               
+              def (timestamp, extension) = """${rootfs[0].name}""".tokenize( '_' )
               def version = '2.6.0'
 
               nexusArtifactUploader(
                 nexusVersion: 'nexus3',
                 protocol: 'http',
                 nexusUrl: '10.125.16.44:8082',
-                groupId: 'jenoptik.uk',
-                version: version,
-                repository: 'vector-incremental-snapshots',
+                groupId: 'incremental.build',
+                version: timestamp,
+                repository: 'VECTOR/',
                 credentialsId: 'nexus-jenkins',
                 artifacts: [
                   [
-                     artifactId: 'rootfs',
-                     classifier: 'snapshot',
+                     artifactId: """${rootfs[0].name}""",
+                     classifier: '',
                      file: """${rootfs[0].path}""",
                      type: 'xz'
                   ],                  
                   [
-                     artifactId: 'bzImage',
-                     classifier: 'snapshot',
+                     artifactId: """${kernel[0].name}""",
+                     classifier: '',
                      file: """${kernel[0].path}""",
-                     type: 'bzImage'
+                     type: ''
                   ]
                 ]
              )
