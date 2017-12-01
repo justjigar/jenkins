@@ -214,32 +214,32 @@ pipeline {
                 def timestamp = """${rootfs[0].name}""".split( '_' )
                 def version = '2.6.0'
 
-                sh """curl -v -F --user \'admin:admin123\' --upload-file ${rootfs[0].path} http://10.125.16.44:8082/vector/standard/incremental/${env.BUILD_NUMBER}/${rootfs[0].name}"""
-                sh """curl -v -F --user \'admin:admin123\' --upload-file ${kernel[0].path} http://10.125.16.44:8082/vector/standard/incremental/${env.BUILD_NUMBER}/${kernel[0].name}"""
+                // sh """curl -v -F --user \'admin:admin123\' --upload-file ${rootfs[0].path} http://10.125.16.44:8082/vector/standard/incremental/${env.BUILD_NUMBER}/${rootfs[0].name}"""
+                // sh """curl -v -F --user \'admin:admin123\' --upload-file ${kernel[0].path} http://10.125.16.44:8082/vector/standard/incremental/${env.BUILD_NUMBER}/${kernel[0].name}"""
 
-             //  nexusArtifactUploader(
-             //    nexusVersion: 'nexus3',
-             //    protocol: 'http',
-             //    nexusUrl: '10.125.16.44:8082',
-             //    groupId: 'incremental.build',
-             //    version: timestamp[0],
-             //    repository: 'VECTOR/',
-             //    credentialsId: 'nexus-jenkins',
-             //    artifacts: [
-             //      [
-             //         artifactId: """${rootfs[0].name}""",
-             //         classifier: '',
-             //         file: """${rootfs[0].path}""",
-             //         type: 'xz'
-             //      ],                  
-             //      [
-             //         artifactId: """${kernel[0].name}""",
-             //         classifier: '',
-             //         file: """${kernel[0].path}""",
-             //         type: ''
-             //      ]
-             //    ]
-             // )
+              nexusArtifactUploader(
+                nexusVersion: 'nexus3',
+                protocol: 'http',
+                nexusUrl: '10.125.16.44:8082',
+                groupId: 'incremental.build',
+                version: timestamp[0],
+                repository: 'VECTOR/',
+                credentialsId: 'nexus-jenkins',
+                artifacts: [
+                  [
+                     artifactId: """${rootfs[0].name}""",
+                     classifier: '',
+                     file: """${rootfs[0].path}""",
+                     type: 'xz'
+                  ],                  
+                  [
+                     artifactId: """${kernel[0].name}""",
+                     classifier: '',
+                     file: """${kernel[0].path}""",
+                     type: ''
+                  ]
+                ]
+             )
               // nexusArtifactUploader {
               //   nexusVersion('nexus3')
               //   protocol('http')
