@@ -214,8 +214,8 @@ pipeline {
                 def timestamp = """${rootfs[0].name}""".split( '_' )
                 def version = '2.6.0'
 
-                sh 'curl -v --user \'admin:admin123\' --upload-file ${rootfs[0].path} http://10.125.16.44:8082/vector/standard/incremental/${env.BUILD_NUMBER}/${rootfs[0].name}'
-                sh 'curl -v --user \'admin:admin123\' --upload-file ${kernel[0].path} http://10.125.16.44:8082/vector/standard/incremental/${env.BUILD_NUMBER}/${kernel[0].name}'
+                sh """curl -v --user \'admin:admin123\' --upload-file ${rootfs[0].path} http://10.125.16.44:8082/vector/standard/incremental/${env.BUILD_NUMBER}/${rootfs[0].name}"""
+                sh """curl -v --user \'admin:admin123\' --upload-file ${kernel[0].path} http://10.125.16.44:8082/vector/standard/incremental/${env.BUILD_NUMBER}/${kernel[0].name}"""
 
              //  nexusArtifactUploader(
              //    nexusVersion: 'nexus3',
