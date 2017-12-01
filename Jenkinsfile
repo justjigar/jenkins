@@ -211,32 +211,35 @@ pipeline {
                 def rootfs = findFiles glob: 'images/*rootfs.cpio.xz'
                 echo """${rootfs[0].name} ${rootfs[0].path} ${rootfs[0].directory} ${rootfs.length} ${rootfs[0].lastModified}"""
               
-              def timestamp = """${rootfs[0].name}""".split( '_' )
-              def version = '2.6.0'
+                def timestamp = """${rootfs[0].name}""".split( '_' )
+                def version = '2.6.0'
 
-              nexusArtifactUploader(
-                nexusVersion: 'nexus3',
-                protocol: 'http',
-                nexusUrl: '10.125.16.44:8082',
-                groupId: 'incremental.build',
-                version: timestamp[0],
-                repository: 'VECTOR/',
-                credentialsId: 'nexus-jenkins',
-                artifacts: [
-                  [
-                     artifactId: """${rootfs[0].name}""",
-                     classifier: '',
-                     file: """${rootfs[0].path}""",
-                     type: 'xz'
-                  ],                  
-                  [
-                     artifactId: """${kernel[0].name}""",
-                     classifier: '',
-                     file: """${kernel[0].path}""",
-                     type: ''
-                  ]
-                ]
-             )
+                sh 'curl -v --user \'admin:admin123\' --upload-file ${rootfs[0].path} http://10.125.16.44:8082/vector/standard/incremental/${env.BUILD_NUMBER}/${rootfs[0].name}'
+                sh 'curl -v --user \'admin:admin123\' --upload-file ${kernel[0].path} http://10.125.16.44:8082/vector/standard/incremental/${env.BUILD_NUMBER}/${kernel[0].name}'
+
+             //  nexusArtifactUploader(
+             //    nexusVersion: 'nexus3',
+             //    protocol: 'http',
+             //    nexusUrl: '10.125.16.44:8082',
+             //    groupId: 'incremental.build',
+             //    version: timestamp[0],
+             //    repository: 'VECTOR/',
+             //    credentialsId: 'nexus-jenkins',
+             //    artifacts: [
+             //      [
+             //         artifactId: """${rootfs[0].name}""",
+             //         classifier: '',
+             //         file: """${rootfs[0].path}""",
+             //         type: 'xz'
+             //      ],                  
+             //      [
+             //         artifactId: """${kernel[0].name}""",
+             //         classifier: '',
+             //         file: """${kernel[0].path}""",
+             //         type: ''
+             //      ]
+             //    ]
+             // )
               // nexusArtifactUploader {
               //   nexusVersion('nexus3')
               //   protocol('http')
