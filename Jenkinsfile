@@ -269,7 +269,7 @@ pipeline {
               //       file('${kernel[0].path}')
               //   }
               // }
-            }
+            //}
           }
         }
       }
