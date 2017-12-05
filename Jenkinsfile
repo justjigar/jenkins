@@ -184,14 +184,13 @@ pipeline {
             archiveArtifacts artifacts: 'images/*bzImage'
             archiveArtifacts artifacts: 'images/*rootfs.cpio.xz'
 
-            def kernel = findFiles glob: 'images/*bzImage'
-            echo """${kernel[0].name} ${kernel[0].path} ${kernel[0].directory} ${kernel.length} ${kernel[0].lastModified}"""
-              
-            def rootfs = findFiles glob: 'images/*rootfs.cpio.xz'
-            echo """${rootfs[0].name} ${rootfs[0].path} ${rootfs[0].directory} ${rootfs.length} ${rootfs[0].lastModified}"""
-            def timestamp = """${rootfs[0].name}""".split( '_' )
-
             script{
+              def kernel = findFiles glob: 'images/*bzImage'
+              echo """${kernel[0].name} ${kernel[0].path} ${kernel[0].directory} ${kernel.length} ${kernel[0].lastModified}"""
+                
+              def rootfs = findFiles glob: 'images/*rootfs.cpio.xz'
+              echo """${rootfs[0].name} ${rootfs[0].path} ${rootfs[0].directory} ${rootfs.length} ${rootfs[0].lastModified}"""
+              def timestamp = """${rootfs[0].name}""".split( '_' )
               def server = Artifactory.server('sandbox-server')
               def uploadSpec = """{
                   "files": [
