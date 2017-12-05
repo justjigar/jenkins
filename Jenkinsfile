@@ -180,66 +180,74 @@ pipeline {
         echo 'Package and Deploy to VECTOR(s)'
         wrap([$class: 'TimestamperBuildWrapper']) {
           dir('./vysionics_bsp/vector_incremental_build') {
-            // echo 'Call ./installer.sh'  
-            // archiveArtifacts artifacts: 'images/*bzImage'
-            // archiveArtifacts artifacts: 'images/*rootfs.cpio.xz'
-            // script{
-            //   def server = Artifactory.server('sandbox-server')
-            //   def uploadSpec = """{
-            //       "files": [
-            //           {
-            //               "pattern": "images/*bzImage",
-            //               "target": "build-incremental",
-            //               "props": "p1=v1;p2=v2"
-            //           },
-            //           {
-            //              "pattern": "images/*rootfs.cpio.xz",
-            //               "target": "build-incremental",
-            //               "props": "p1=v1;p2=v2"
-            //           }
-            //       ]
-            //   }"""
-            //   // Upload files to Artifactory:
-            //   def buildInfo = Artifactory.newBuildInfo()
-            //   buildInfo.env.capture = true
-            //   server.upload(uploadSpec, buildInfo)
-            //}
-            script {
-                def kernel = findFiles glob: 'images/*bzImage'
-                echo """${kernel[0].name} ${kernel[0].path} ${kernel[0].directory} ${kernel.length} ${kernel[0].lastModified}"""
-              
-                def rootfs = findFiles glob: 'images/*rootfs.cpio.xz'
-                echo """${rootfs[0].name} ${rootfs[0].path} ${rootfs[0].directory} ${rootfs.length} ${rootfs[0].lastModified}"""
-              
-                def timestamp = """${rootfs[0].name}""".split( '_' )
-                def version = '2.6.0'
+            echo 'Call ./installer.sh'  
+            archiveArtifacts artifacts: 'images/*bzImage'
+            archiveArtifacts artifacts: 'images/*rootfs.cpio.xz'
 
-                // sh """curl -v -F --user \'admin:admin123\' --upload-file ${rootfs[0].path} http://10.125.16.44:8082/vector/standard/incremental/${env.BUILD_NUMBER}/${rootfs[0].name}"""
-                // sh """curl -v -F --user \'admin:admin123\' --upload-file ${kernel[0].path} http://10.125.16.44:8082/vector/standard/incremental/${env.BUILD_NUMBER}/${kernel[0].name}"""
+            def kernel = findFiles glob: 'images/*bzImage'
+            echo """${kernel[0].name} ${kernel[0].path} ${kernel[0].directory} ${kernel.length} ${kernel[0].lastModified}"""
+              
+            def rootfs = findFiles glob: 'images/*rootfs.cpio.xz'
+            echo """${rootfs[0].name} ${rootfs[0].path} ${rootfs[0].directory} ${rootfs.length} ${rootfs[0].lastModified}"""
+            def timestamp = """${rootfs[0].name}""".split( '_' )
 
-              nexusArtifactUploader(
-                nexusVersion: 'nexus3',
-                protocol: 'http',
-                nexusUrl: '10.125.16.44:8082',
-                groupId: 'incremental.build',
-                version: timestamp[0],
-                repository: 'VECTOR/',
-                credentialsId: 'nexus-jenkins',
-                artifacts: [
-                  [
-                     artifactId: """${rootfs[0].name}""",
-                     classifier: '',
-                     file: """${rootfs[0].path}""",
-                     type: 'xz'
-                  ],                  
-                  [
-                     artifactId: """${kernel[0].name}""",
-                     classifier: '',
-                     file: """${kernel[0].path}""",
-                     type: ''
+            script{
+              def server = Artifactory.server('sandbox-server')
+              def uploadSpec = """{
+                  "files": [
+                      {
+                          "pattern": "images/*bzImage",
+                          "target": "VECTOR/build/incremental/${timestamp}/",
+                          "props": "p1=v1;p2=v2"
+                      },
+                      {
+                         "pattern": "images/*rootfs.cpio.xz",
+                          "target": "VECTOR/build/incremental/${timestamp}/",
+                          "props": "p1=v1;p2=v2"
+                      }
                   ]
-                ]
-             )
+              }"""
+              // Upload files to Artifactory:
+              def buildInfo = Artifactory.newBuildInfo()
+              buildInfo.env.capture = true
+              server.upload(uploadSpec, buildInfo)
+            }
+            // script {
+            //     def kernel = findFiles glob: 'images/*bzImage'
+            //     echo """${kernel[0].name} ${kernel[0].path} ${kernel[0].directory} ${kernel.length} ${kernel[0].lastModified}"""
+              
+            //     def rootfs = findFiles glob: 'images/*rootfs.cpio.xz'
+            //     echo """${rootfs[0].name} ${rootfs[0].path} ${rootfs[0].directory} ${rootfs.length} ${rootfs[0].lastModified}"""
+              
+            //     def timestamp = """${rootfs[0].name}""".split( '_' )
+            //     def version = '2.6.0'
+
+            //     // sh """curl -v -F --user \'admin:admin123\' --upload-file ${rootfs[0].path} http://10.125.16.44:8082/vector/standard/incremental/${env.BUILD_NUMBER}/${rootfs[0].name}"""
+            //     // sh """curl -v -F --user \'admin:admin123\' --upload-file ${kernel[0].path} http://10.125.16.44:8082/vector/standard/incremental/${env.BUILD_NUMBER}/${kernel[0].name}"""
+
+            //   nexusArtifactUploader(
+            //     nexusVersion: 'nexus3',
+            //     protocol: 'http',
+            //     nexusUrl: '10.125.16.44:8082',
+            //     groupId: 'incremental.build',
+            //     version: timestamp[0],
+            //     repository: 'VECTOR/',
+            //     credentialsId: 'nexus-jenkins',
+            //     artifacts: [
+            //       [
+            //          artifactId: """${rootfs[0].name}""",
+            //          classifier: '',
+            //          file: """${rootfs[0].path}""",
+            //          type: 'xz'
+            //       ],                  
+            //       [
+            //          artifactId: """${kernel[0].name}""",
+            //          classifier: '',
+            //          file: """${kernel[0].path}""",
+            //          type: 'bzImage'
+            //       ]
+            //     ]
+            //  )
               // nexusArtifactUploader {
               //   nexusVersion('nexus3')
               //   protocol('http')
