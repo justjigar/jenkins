@@ -112,8 +112,8 @@ pipeline {
                   sh 'mkdir -p target/usr/vysionics/etc/'
                   sh 'touch target/usr/vysionics/etc/md5sums.txt'
                   sh 'make BR2_JLEVEL=0 BR2_EXTERNAL=../vys_buildroot O=$PWD -C../buildroot/ VECTOR_defconfig'
-                  sh 'make BR2_BUILD_TESTS=y'
-                  //sh 'make'
+                  //sh 'make BR2_BUILD_TESTS=y'
+                  sh 'make'
               }
             }
           }
