@@ -278,14 +278,20 @@ pipeline {
         echo 'Smoke tests to verify deployment(s)'
       }
     }
-    stage('Integration Tests') {
+    stage('Python Integration Tests') {
       environment {
         PYTHONPATH = "$WORKSPACE/vysionics_bsp/vector_incremental_build/build/vysionics-HEAD/inttest/packages/"
       }
       steps {
         echo 'Integration tests on target'
-        dir('./vysionics_bsp/vector_incremental_build/build/vysionics-HEAD/inttest/') {
-          
+        dir('./vysionics_bsp/vector_incremental_build/build/vysionics-HEAD/inttest/py_tests/') {
+          sh 'py.test --vs test_ftp.py ----gtest_output=xml:test_ftp.xml'
+        }
+      }
+      post {
+        always {
+          step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'GoogleTestType', deleteOutputFiles: false, failIfNotNew: true, pattern: '**/src/*-build/test_*.xml', skipNoTestFiles: false, stopProcessingIfError: true]]])
+          }
       }
     }
     stage('Finalise') {
