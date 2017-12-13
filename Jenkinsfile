@@ -294,7 +294,7 @@ pipeline {
       steps {
         echo 'Integration tests on target'
         dir('./vysionics_bsp/vector_incremental_build/build/vysionics-HEAD/inttest/py_tests/') {
-          sh 'py.test -vs test_ftp.py --juni-xml=xml/test_ftp.xml'
+          sh 'py.test -vs test_ftp.py --junit-xml=xml/test_ftp.xml'
         }
       }
       post {
