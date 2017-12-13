@@ -102,6 +102,9 @@ pipeline {
       }
     }
     stage('Build') {
+      when {
+        branch 'jigar'
+      }
       steps {
         script {
           if( params.BUILD_ACTION == 'clean' ) {
@@ -111,8 +114,8 @@ pipeline {
               dir('./vysionics_bsp/vector_incremental_build') {
                   sh 'mkdir -p target/usr/vysionics/etc/'
                   sh 'touch target/usr/vysionics/etc/md5sums.txt'
-                  //sh 'make BR2_JLEVEL=0 BR2_EXTERNAL=../vys_buildroot O=$PWD -C../buildroot/ VECTOR_defconfig'
-                  //sh 'make BR2_BUILD_TESTS=y'
+                  sh 'make BR2_JLEVEL=0 BR2_EXTERNAL=../vys_buildroot O=$PWD -C../buildroot/ VECTOR_defconfig'
+                  sh 'make BR2_BUILD_TESTS=y'
                   //sh 'make'
               }
             }
@@ -121,7 +124,7 @@ pipeline {
             echo 'Build Incremental of vysionics-HEAD'
             wrap([$class: 'TimestamperBuildWrapper']) {
               dir('./vysionics_bsp/vector_incremental_build') {
-                  //sh 'make BR2_BUILD_TESTS=y'            
+                  sh 'make BR2_BUILD_TESTS=y'            
               }
             }
           }
@@ -129,6 +132,9 @@ pipeline {
       }
     }
     stage('Test') {
+      when {
+        branch 'jigar'
+      }      
       parallel {
         stage('Unit Test') {
           environment { 
@@ -137,28 +143,28 @@ pipeline {
           steps {
             dir('./vysionics_bsp/vector_incremental_build/build/vysionics-HEAD/buildroot-build/') {
               dir('./aspd/src/aspd-build'){
-                //sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_aspd --gtest_output=xml:test_aspd.xml'
+                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_aspd --gtest_output=xml:test_aspd.xml'
               }
               dir('./bofservice/src/bofservice-build'){
-                //sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_bofservice --gtest_output=xml:test_bofservice.xml'
+                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_bofservice --gtest_output=xml:test_bofservice.xml'
               }
               // dir('./commissioning/src/commissioning-build'){
               //  sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_commissioning --gtest_output=xml:test_commissioning.xml'
               //}
               dir('./libVysUtils/src/libVysUtils-build'){
-                //sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_VysUtils --gtest_output=xml:test_VysUtils.xml'
+                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_VysUtils --gtest_output=xml:test_VysUtils.xml'
               }
               // dir('./libengine/src/libengine-build'){
               //   sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_libengine --gtest_output=xml:test_libengine.xml'
               // }
               dir('./libengine_qfree/src/libengine_qfree-build'){
-                //sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_libengineq --gtest_output=xml:test_libengineq.xml'
+                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_libengineq --gtest_output=xml:test_libengineq.xml'
               }
               dir('./nrsd/src/nrsd-build'){
-                //sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_nrsd --gtest_output=xml:test_nrsd.xml'
+                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_nrsd --gtest_output=xml:test_nrsd.xml'
               }
               dir('./supervisor/src/supervisor-build'){
-                //sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./test/test_supervisor --gtest_output=xml:test_supervisor.xml'
+                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./test/test_supervisor --gtest_output=xml:test_supervisor.xml'
               }
             }
           }
@@ -176,6 +182,9 @@ pipeline {
       }
     }
     stage('Package & Deploy') {
+      when {
+        branch 'jigar'
+      }      
       steps {
         echo 'Package and Deploy to VECTOR(s)'
         wrap([$class: 'TimestamperBuildWrapper']) {
