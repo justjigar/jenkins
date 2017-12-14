@@ -102,9 +102,6 @@ pipeline {
       }
     }
     stage('Build') {
-      when {
-        branch 'jigar'
-      }
       steps {
         script {
           if( params.BUILD_ACTION == 'clean' ) {
@@ -132,9 +129,6 @@ pipeline {
       }
     }
     stage('Test') {
-      when {
-        branch 'jigar'
-      }      
       parallel {
         stage('Unit Test') {
           environment { 
@@ -182,9 +176,6 @@ pipeline {
       }
     }
     stage('Package & Deploy') {
-      when {
-        branch 'jigar'
-      }      
       steps {
         echo 'Package and Deploy to VECTOR(s)'
         wrap([$class: 'TimestamperBuildWrapper']) {
