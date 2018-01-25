@@ -137,28 +137,28 @@ pipeline {
           steps {
             dir('./vysionics_bsp/vector_incremental_build/build/vysionics-HEAD/buildroot-build/') {
               dir('./aspd/src/aspd-build'){
-                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_aspd --gtest_output=xml:test_aspd.xml'
+                //sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_aspd --gtest_output=xml:test_aspd.xml'
               }
               dir('./bofservice/src/bofservice-build'){
-                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_bofservice --gtest_output=xml:test_bofservice.xml'
+                //sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_bofservice --gtest_output=xml:test_bofservice.xml'
               }
               // dir('./commissioning/src/commissioning-build'){
               //  sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_commissioning --gtest_output=xml:test_commissioning.xml'
               //}
               dir('./libVysUtils/src/libVysUtils-build'){
-                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_VysUtils --gtest_output=xml:test_VysUtils.xml'
+                //sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_VysUtils --gtest_output=xml:test_VysUtils.xml'
               }
               // dir('./libengine/src/libengine-build'){
               //   sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_libengine --gtest_output=xml:test_libengine.xml'
               // }
               dir('./libengine_qfree/src/libengine_qfree-build'){
-                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_libengineq --gtest_output=xml:test_libengineq.xml'
+                //sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_libengineq --gtest_output=xml:test_libengineq.xml'
               }
               dir('./nrsd/src/nrsd-build'){
-                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_nrsd --gtest_output=xml:test_nrsd.xml'
+                //sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./src/test/test_nrsd --gtest_output=xml:test_nrsd.xml'
               }
               dir('./supervisor/src/supervisor-build'){
-                sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./test/test_supervisor --gtest_output=xml:test_supervisor.xml'
+                //sh 'LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./test/test_supervisor --gtest_output=xml:test_supervisor.xml'
               }
             }
           }
@@ -285,7 +285,8 @@ pipeline {
       steps {
         echo 'Integration tests on target'
         dir('./vysionics_bsp/vector_incremental_build/build/vysionics-HEAD/inttest/py_tests/') {
-          sh 'py.test -vs --junit-xml=xml/test_ftp.xml'
+          sh 'py.test -vs test_ftp.py --junit-xml=xml/test_ftp.xml'
+          sh 'py.test -vs test_utmc12.py --junit-xml=xml/test_utmc12.xml'
         }
       }
       post {
